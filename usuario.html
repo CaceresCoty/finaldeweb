@@ -1,0 +1,1542 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BiblioTecca- Panel Usuario</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: #f8fafc;
+            color: #333;
+        }
+
+        /* Header */
+        .header {
+            background: white;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            padding: 15px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: #4361ee;
+            font-size: 24px;
+            font-weight: 700;
+            text-decoration: none;
+        }
+
+        .logo i {
+            font-size: 28px;
+        }
+
+        .user-menu {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .cart-icon {
+            position: relative;
+            color: #555;
+            font-size: 22px;
+            cursor: pointer;
+            padding: 8px;
+        }
+
+        .cart-count {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background: #f72585;
+            color: white;
+            font-size: 12px;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, #4361ee, #3a0ca3);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+        }
+
+        .user-details {
+            text-align: right;
+        }
+
+        .user-name {
+            font-weight: 600;
+            color: #333;
+        }
+
+        .user-role {
+            font-size: 12px;
+            color: #666;
+        }
+
+        .btn-logout {
+            background: #f72585;
+            color: white;
+            border: none;
+            padding: 8px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s;
+        }
+
+        .btn-logout:hover {
+            background: #e1156d;
+            transform: translateY(-2px);
+        }
+
+        /* Contenido Principal */
+        .main-container {
+            max-width: 1200px;
+            margin: 30px auto;
+            padding: 0 20px;
+        }
+
+        .welcome-section {
+            background: linear-gradient(135deg, #4361ee, #3a0ca3);
+            color: white;
+            padding: 40px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 25px rgba(67, 97, 238, 0.3);
+        }
+
+        .welcome-section h1 {
+            font-size: 36px;
+            margin-bottom: 10px;
+        }
+
+        .welcome-section p {
+            opacity: 0.9;
+            font-size: 16px;
+        }
+
+        /* Navegación */
+        .user-nav {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+
+        .nav-btn {
+            padding: 15px 25px;
+            background: white;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 500;
+            color: #555;
+            transition: all 0.3s;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+        }
+
+        .nav-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+            color: #4361ee;
+        }
+
+        .nav-btn.active {
+            background: #4361ee;
+            color: white;
+        }
+
+        .nav-btn i {
+            font-size: 18px;
+        }
+
+        /* Secciones */
+        .section {
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .section.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+
+        .section-header h2 {
+            color: #333;
+            font-size: 28px;
+        }
+
+        /* Grid de Libros */
+        .libros-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 25px;
+            margin-top: 20px;
+        }
+
+        .libro-card {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s;
+            position: relative;
+        }
+
+        .libro-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        }
+
+        .libro-imagen {
+            height: 180px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 48px;
+        }
+
+        .libro-content {
+            padding: 20px;
+        }
+
+        .libro-titulo {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 8px;
+            color: #333;
+            line-height: 1.3;
+        }
+
+        .libro-autor {
+            color: #666;
+            font-size: 14px;
+            margin-bottom: 10px;
+        }
+
+        .libro-desc {
+            font-size: 13px;
+            color: #777;
+            margin-bottom: 15px;
+            line-height: 1.5;
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .libro-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .libro-precio {
+            font-size: 22px;
+            font-weight: 700;
+            color: #4361ee;
+        }
+
+        .libro-stock {
+            font-size: 13px;
+            padding: 4px 12px;
+            border-radius: 20px;
+            background: #e6ffe6;
+            color: #008000;
+        }
+
+        .libro-stock.agotado {
+            background: #ffe6e6;
+            color: #c00;
+        }
+
+        .libro-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn-add-cart {
+            flex: 1;
+            background: #4cc9f0;
+            color: white;
+            border: none;
+            padding: 10px;
+            border-radius: 8px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+
+        .btn-add-cart:hover {
+            background: #3ab5d8;
+        }
+
+        .btn-add-cart:disabled {
+            background: #cccccc;
+            cursor: not-allowed;
+        }
+
+        .btn-view {
+            background: #f0f0f0;
+            color: #333;
+            border: none;
+            padding: 10px;
+            border-radius: 8px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s;
+        }
+
+        .btn-view:hover {
+            background: #e0e0e0;
+        }
+
+        /* Carrito */
+        .carrito-container {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        }
+
+        .carrito-items {
+            margin-bottom: 30px;
+        }
+
+        .carrito-item {
+            display: flex;
+            align-items: center;
+            padding: 20px;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .carrito-imagen {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 24px;
+            margin-right: 20px;
+        }
+
+        .carrito-info {
+            flex: 1;
+        }
+
+        .carrito-titulo {
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .carrito-autor {
+            color: #666;
+            font-size: 14px;
+            margin-bottom: 10px;
+        }
+
+        .carrito-cantidad {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .btn-cantidad {
+            width: 30px;
+            height: 30px;
+            border: 1px solid #ddd;
+            background: white;
+            border-radius: 4px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .btn-cantidad:hover {
+            background: #f8f9fa;
+        }
+
+        .carrito-subtotal {
+            font-weight: 700;
+            color: #4361ee;
+            font-size: 18px;
+            min-width: 100px;
+            text-align: right;
+        }
+
+        .btn-remove {
+            background: #ffe6e6;
+            color: #d32f2f;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 6px;
+            cursor: pointer;
+            margin-left: 15px;
+            transition: all 0.3s;
+        }
+
+        .btn-remove:hover {
+            background: #ffcdd2;
+        }
+
+        .carrito-total {
+            background: #f8f9fa;
+            padding: 25px;
+            border-radius: 12px;
+            margin-top: 20px;
+        }
+
+        .total-line {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .total-final {
+            font-size: 28px;
+            font-weight: 700;
+            color: #4361ee;
+        }
+
+        .checkout-btn {
+            width: 100%;
+            background: linear-gradient(to right, #00b894, #00a085);
+            color: white;
+            border: none;
+            padding: 18px;
+            border-radius: 10px;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 20px;
+            transition: all 0.3s;
+        }
+
+        .checkout-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 184, 148, 0.4);
+        }
+
+        /* Préstamos */
+        .prestamos-list {
+            display: grid;
+            gap: 20px;
+        }
+
+        .prestamo-card {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        }
+
+        .prestamo-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .prestamo-libro {
+            font-weight: 600;
+            color: #333;
+            font-size: 18px;
+        }
+
+        .prestamo-estado {
+            padding: 6px 15px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .estado-activo {
+            background: #e6ffe6;
+            color: #008000;
+        }
+
+        .estado-vencido {
+            background: #ffe6e6;
+            color: #c00;
+        }
+
+        .estado-completado {
+            background: #f0f0f0;
+            color: #666;
+        }
+
+        .prestamo-detalles {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .detalle-item {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .detalle-label {
+            font-size: 12px;
+            color: #666;
+            margin-bottom: 5px;
+        }
+
+        .detalle-valor {
+            font-weight: 600;
+            color: #333;
+        }
+
+        /* Perfil */
+        .profile-container {
+            background: white;
+            border-radius: 15px;
+            padding: 40px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        }
+
+        .profile-header {
+            display: flex;
+            align-items: center;
+            gap: 25px;
+            margin-bottom: 40px;
+        }
+
+        .profile-avatar {
+            width: 100px;
+            height: 100px;
+            background: linear-gradient(135deg, #4361ee, #3a0ca3);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 36px;
+            font-weight: 600;
+        }
+
+        .profile-info h3 {
+            font-size: 28px;
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .profile-email {
+            color: #666;
+            font-size: 16px;
+        }
+
+        .profile-details {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+        }
+
+        .detail-card {
+            background: #f8f9fa;
+            padding: 25px;
+            border-radius: 10px;
+        }
+
+        .detail-title {
+            color: #666;
+            font-size: 14px;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .detail-value {
+            font-size: 18px;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .btn-edit-profile {
+            background: #4361ee;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 8px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 30px;
+            transition: all 0.3s;
+        }
+
+        .btn-edit-profile:hover {
+            background: #3a56d4;
+            transform: translateY(-2px);
+        }
+
+        /* Modal de Libro */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 15px;
+            width: 100%;
+            max-width: 600px;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+        }
+
+        .modal-header {
+            padding: 20px;
+            border-bottom: 1px solid #f0f0f0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-title {
+            font-size: 24px;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .btn-close {
+            background: none;
+            border: none;
+            font-size: 28px;
+            cursor: pointer;
+            color: #777;
+        }
+
+        .modal-body {
+            padding: 30px;
+        }
+
+        .modal-libro-info {
+            display: grid;
+            grid-template-columns: 150px 1fr;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+
+        .modal-libro-imagen {
+            width: 150px;
+            height: 200px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 48px;
+        }
+
+        .modal-libro-content h3 {
+            font-size: 24px;
+            margin-bottom: 10px;
+            color: #333;
+        }
+
+        .modal-libro-content .autor {
+            color: #666;
+            font-size: 16px;
+            margin-bottom: 15px;
+        }
+
+        .modal-libro-content .descripcion {
+            line-height: 1.6;
+            color: #555;
+            margin-bottom: 20px;
+        }
+
+        .modal-footer {
+            padding: 20px;
+            border-top: 1px solid #f0f0f0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-precio {
+            font-size: 28px;
+            font-weight: 700;
+            color: #4361ee;
+        }
+
+        .modal-buttons {
+            display: flex;
+            gap: 10px;
+        }
+
+        /* Mensajes */
+        .message {
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            display: none;
+            text-align: center;
+        }
+
+        .message.success {
+            background: #e6ffe6;
+            color: #008000;
+            border: 1px solid #c8e6c9;
+            display: block;
+        }
+
+        .message.error {
+            background: #ffe6e6;
+            color: #c00;
+            border: 1px solid #ffcdd2;
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <div class="header">
+        <a href="login.html" class="logo">
+            <i class="fas fa-book-reader"></i>
+            <span>MIS ALQUIL</span>
+        </a>
+        
+        <div class="user-menu">
+            <div class="cart-icon" onclick="mostrarSeccion('carrito')">
+                <i class="fas fa-shopping-cart"></i>
+                <div class="cart-count" id="cartCount">0</div>
+            </div>
+            
+            <div class="user-info">
+                <div class="user-avatar" id="userAvatar">U</div>
+                <div class="user-details">
+                    <div class="user-name" id="userName"></div>
+                    <div class="user-role">Usuario</div>
+                </div>
+            </div>
+            
+            <button class="btn-logout" onclick="cerrarSesion()">
+                <i class="fas fa-sign-out-alt"></i> Salir
+            </button>
+        </div>
+    </div>
+
+    <!-- Contenido Principal -->
+    <div class="main-container">
+        <!-- Mensaje de bienvenida -->
+        <div id="welcomeMessage" class="message success"></div>
+
+        <!-- Sección de bienvenida -->
+        <div class="welcome-section">
+            <h1>¡Bienvenido de nuevo!</h1>
+            <p>Explora nuestro catálogo de libros y gestiona tus préstamos fácilmente.</p>
+        </div>
+
+        <!-- Navegación -->
+        <div class="user-nav">
+            <button class="nav-btn active" onclick="mostrarSeccion('catalogo')">
+                <i class="fas fa-book"></i> Catálogo de Libros
+            </button>
+            <button class="nav-btn" onclick="mostrarSeccion('carrito')">
+                <i class="fas fa-shopping-cart"></i> Mi Carrito
+            </button>
+            <button class="nav-btn" onclick="mostrarSeccion('prestamos')">
+                <i class="fas fa-exchange-alt"></i> Mis Préstamos
+            </button>
+            <button class="nav-btn" onclick="mostrarSeccion('perfil')">
+                <i class="fas fa-user"></i> Mi Perfil
+            </button>
+        </div>
+
+        <!-- Sección: Catálogo -->
+        <div id="catalogo" class="section active">
+            <div class="section-header">
+                <h2>Catálogo de Libros Disponibles</h2>
+                <div class="search-box">
+                    <input type="text" id="searchInput" placeholder="Buscar libros..." style="padding: 10px; border-radius: 8px; border: 1px solid #ddd; width: 250px;">
+                </div>
+            </div>
+            
+            <div class="libros-grid" id="librosGrid">
+                <!-- Los libros se cargan aquí -->
+            </div>
+        </div>
+
+        <!-- Sección: Carrito -->
+        <div id="carrito" class="section">
+            <div class="section-header">
+                <h2>Mi Carrito de Compras</h2>
+            </div>
+            
+            <div class="carrito-container" id="carritoContainer">
+                <!-- Los items del carrito se cargan aquí -->
+                <div id="carritoVacio" style="text-align: center; padding: 60px; color: #666;">
+                    <i class="fas fa-shopping-cart" style="font-size: 60px; margin-bottom: 20px; opacity: 0.3;"></i>
+                    <h3>Tu carrito está vacío</h3>
+                    <p>Agrega libros desde el catálogo para comenzar</p>
+                    <button class="btn-edit-profile" onclick="mostrarSeccion('catalogo')">
+                        <i class="fas fa-book"></i> Ver Catálogo
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Sección: Préstamos -->
+        <div id="prestamos" class="section">
+            <div class="section-header">
+                <h2>Mis Préstamos Activos</h2>
+            </div>
+            
+            <div class="prestamos-list" id="prestamosList">
+                <!-- Los préstamos se cargan aquí -->
+                <div style="text-align: center; padding: 60px; color: #666;">
+                    <i class="fas fa-exchange-alt" style="font-size: 60px; margin-bottom: 20px; opacity: 0.3;"></i>
+                    <h3>No tienes préstamos activos</h3>
+                    <p>Alquila libros desde el catálogo para comenzar</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Sección: Perfil -->
+        <div id="perfil" class="section">
+            <div class="section-header">
+                <h2>Mi Perfil</h2>
+                <button class="btn-edit-profile" onclick="editarPerfil()">
+                    <i class="fas fa-edit"></i> Editar Perfil
+                </button>
+            </div>
+            
+            <div class="profile-container">
+                <div class="profile-header">
+                    <div class="profile-avatar" id="profileAvatar">U</div>
+                    <div class="profile-info">
+                        <h3 id="profileName"></h3>
+                        <div class="profile-email" id="profileEmail"></div>
+                    </div>
+                </div>
+                
+                <div class="profile-details">
+                    <div class="detail-card">
+                        <div class="detail-title">Información Personal</div>
+                        <div class="detail-value" id="profilePhone">N/A</div>
+                        <div class="detail-value" id="profileAddress">N/A</div>
+                    </div>
+                    
+                    <div class="detail-card">
+                        <div class="detail-title">Estadísticas</div>
+                        <div class="detail-value" id="profilePrestamos">0 préstamos</div>
+                        <div class="detail-value" id="profileMiembro">Miembro desde: N/A</div>
+                    </div>
+                    
+                    <div class="detail-card">
+                        <div class="detail-title">Preferencias</div>
+                        <div class="detail-value">Género favorito: No especificado</div>
+                        <div class="detail-value">Notificaciones: Activadas</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de Libro -->
+    <div id="modalLibro" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-title" id="modalLibroTitulo"></div>
+                <button class="btn-close" onclick="cerrarModalLibro()">×</button>
+            </div>
+            
+            <div class="modal-body">
+                <div class="modal-libro-info">
+                    <div class="modal-libro-imagen">
+                        <i class="fas fa-book"></i>
+                    </div>
+                    <div class="modal-libro-content">
+                        <h3 id="modalLibroNombre"></h3>
+                        <div class="autor" id="modalLibroAutor"></div>
+                        <div class="descripcion" id="modalLibroDescripcion"></div>
+                        <div class="detail-item">
+                            <div class="detalle-label">Género</div>
+                            <div class="detalle-valor" id="modalLibroGenero"></div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detalle-label">Stock disponible</div>
+                            <div class="detalle-valor" id="modalLibroStock"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="modal-footer">
+                <div class="modal-precio" id="modalLibroPrecio"></div>
+                <div class="modal-buttons">
+                    <button class="btn-add-cart" id="modalBtnAddCart" onclick="agregarAlCarritoDesdeModal()">
+                        <i class="fas fa-cart-plus"></i> Agregar al Carrito
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ============================
+        // VARIABLES GLOBALES
+        // ============================
+        let usuarioActual = null;
+        let libroSeleccionado = null;
+
+        // ============================
+        // FUNCIONES DE INICIO
+        // ============================
+        function verificarSesion() {
+            const usuario = JSON.parse(sessionStorage.getItem('usuario_actual'));
+            
+            if (!usuario) {
+                window.location.href = 'login.html';
+                return;
+            }
+            
+            if (usuario.tipo === 'admin') {
+                window.location.href = 'admin.html';
+                return;
+            }
+            
+            usuarioActual = usuario;
+            
+            // Configurar interfaz
+            document.getElementById('userName').textContent = usuario.nombre;
+            document.getElementById('userAvatar').textContent = usuario.nombre.charAt(0).toUpperCase();
+            document.getElementById('profileName').textContent = usuario.nombre;
+            document.getElementById('profileEmail').textContent = usuario.email;
+            document.getElementById('profileAvatar').textContent = usuario.nombre.charAt(0).toUpperCase();
+            
+            if (usuario.telefono) {
+                document.getElementById('profilePhone').textContent = usuario.telefono;
+            }
+            
+            if (usuario.direccion) {
+                document.getElementById('profileAddress').textContent = usuario.direccion;
+            }
+            
+            // Mostrar mensaje de bienvenida
+            const welcomeMsg = document.getElementById('welcomeMessage');
+            welcomeMsg.textContent = `¡Hola ${usuario.nombre}! Bienvenido a Mis Alquil.`;
+            setTimeout(() => {
+                welcomeMsg.style.display = 'none';
+            }, 3000);
+            
+            // Cargar datos
+            cargarCatalogo();
+            actualizarCarrito();
+            cargarPrestamosUsuario();
+            actualizarContadorCarrito();
+        }
+
+        function cerrarSesion() {
+            sessionStorage.removeItem('usuario_actual');
+            window.location.href = 'login.html';
+        }
+
+        // ============================
+        // FUNCIONES DE NAVEGACIÓN
+        // ============================
+        function mostrarSeccion(seccionId) {
+            // Actualizar botones de navegación
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            document.querySelector(`[onclick*="${seccionId}"]`).classList.add('active');
+            
+            // Mostrar sección
+            document.querySelectorAll('.section').forEach(seccion => {
+                seccion.classList.remove('active');
+            });
+            document.getElementById(seccionId).classList.add('active');
+            
+            // Actualizar contenido si es necesario
+            if (seccionId === 'carrito') {
+                actualizarCarrito();
+            } else if (seccionId === 'prestamos') {
+                cargarPrestamosUsuario();
+            }
+        }
+
+        // ============================
+        // FUNCIONES DEL CATÁLOGO
+        // ============================
+        function cargarCatalogo() {
+            const libros = JSON.parse(localStorage.getItem('misalquil_libros') || '[]');
+            const grid = document.getElementById('librosGrid');
+            grid.innerHTML = '';
+            
+            libros.forEach(libro => {
+                const card = document.createElement('div');
+                card.className = 'libro-card';
+                card.innerHTML = `
+                    <div class="libro-imagen">
+                        <i class="fas fa-book"></i>
+                    </div>
+                    <div class="libro-content">
+                        <h3 class="libro-titulo">${libro.titulo}</h3>
+                        <div class="libro-autor">${libro.autor}</div>
+                        <p class="libro-desc">${libro.descripcion || 'Sin descripción disponible.'}</p>
+                        <div class="libro-meta">
+                            <div class="libro-precio">$${libro.precio.toFixed(2)}</div>
+                            <div class="libro-stock ${libro.stock === 0 ? 'agotado' : ''}">
+                                ${libro.stock === 0 ? 'Agotado' : `${libro.stock} disponibles`}
+                            </div>
+                        </div>
+                        <div class="libro-actions">
+                            <button class="btn-view" onclick="verLibro(${libro.id})">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                            <button class="btn-add-cart" onclick="agregarAlCarrito(${libro.id})" 
+                                    ${libro.stock === 0 ? 'disabled' : ''}>
+                                <i class="fas fa-cart-plus"></i> Agregar
+                            </button>
+                        </div>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+            
+            // Configurar búsqueda
+            document.getElementById('searchInput').addEventListener('input', function(e) {
+                const searchTerm = e.target.value.toLowerCase();
+                const cards = document.querySelectorAll('.libro-card');
+                
+                cards.forEach(card => {
+                    const titulo = card.querySelector('.libro-titulo').textContent.toLowerCase();
+                    const autor = card.querySelector('.libro-autor').textContent.toLowerCase();
+                    const desc = card.querySelector('.libro-desc').textContent.toLowerCase();
+                    
+                    if (titulo.includes(searchTerm) || autor.includes(searchTerm) || desc.includes(searchTerm)) {
+                        card.style.display = 'block';
+                    } else {
+                        card.style.display = 'none';
+                    }
+                });
+            });
+        }
+
+        function verLibro(libroId) {
+            const libros = JSON.parse(localStorage.getItem('misalquil_libros') || '[]');
+            libroSeleccionado = libros.find(l => l.id === libroId);
+            
+            if (libroSeleccionado) {
+                document.getElementById('modalLibroTitulo').textContent = 'Detalles del Libro';
+                document.getElementById('modalLibroNombre').textContent = libroSeleccionado.titulo;
+                document.getElementById('modalLibroAutor').textContent = `Autor: ${libroSeleccionado.autor}`;
+                document.getElementById('modalLibroDescripcion').textContent = libroSeleccionado.descripcion || 'Sin descripción disponible.';
+                document.getElementById('modalLibroGenero').textContent = libroSeleccionado.genero;
+                document.getElementById('modalLibroStock').textContent = libroSeleccionado.stock;
+                document.getElementById('modalLibroPrecio').textContent = `$${libroSeleccionado.precio.toFixed(2)}`;
+                
+                const btnAddCart = document.getElementById('modalBtnAddCart');
+                if (libroSeleccionado.stock === 0) {
+                    btnAddCart.disabled = true;
+                    btnAddCart.innerHTML = '<i class="fas fa-times"></i> Agotado';
+                } else {
+                    btnAddCart.disabled = false;
+                    btnAddCart.innerHTML = '<i class="fas fa-cart-plus"></i> Agregar al Carrito';
+                }
+                
+                document.getElementById('modalLibro').style.display = 'flex';
+            }
+        }
+
+        function cerrarModalLibro() {
+            document.getElementById('modalLibro').style.display = 'none';
+            libroSeleccionado = null;
+        }
+
+        // ============================
+        // FUNCIONES DEL CARRITO
+        // ============================
+        function obtenerCarrito() {
+            const carritos = JSON.parse(localStorage.getItem('misalquil_carritos') || '{}');
+            return carritos[usuarioActual.id] || [];
+        }
+
+        function guardarCarrito(carrito) {
+            const carritos = JSON.parse(localStorage.getItem('misalquil_carritos') || '{}');
+            carritos[usuarioActual.id] = carrito;
+            localStorage.setItem('misalquil_carritos', JSON.stringify(carritos));
+        }
+
+        function agregarAlCarrito(libroId) {
+            const libros = JSON.parse(localStorage.getItem('misalquil_libros') || '[]');
+            const libro = libros.find(l => l.id === libroId);
+            
+            if (!libro) {
+                alert('Libro no encontrado');
+                return;
+            }
+            
+            if (libro.stock === 0) {
+                alert('Este libro está agotado');
+                return;
+            }
+            
+            let carrito = obtenerCarrito();
+            
+            // Verificar si ya está en el carrito
+            const itemExistente = carrito.find(item => item.libroId === libroId);
+            
+            if (itemExistente) {
+                if (itemExistente.cantidad >= libro.stock) {
+                    alert('No hay más unidades disponibles de este libro');
+                    return;
+                }
+                itemExistente.cantidad += 1;
+            } else {
+                carrito.push({
+                    libroId: libroId,
+                    cantidad: 1,
+                    precio: libro.precio,
+                    titulo: libro.titulo,
+                    autor: libro.autor
+                });
+            }
+            
+            guardarCarrito(carrito);
+            actualizarContadorCarrito();
+            
+            // Mostrar confirmación
+            const welcomeMsg = document.getElementById('welcomeMessage');
+            welcomeMsg.textContent = `"${libro.titulo}" agregado al carrito`;
+            welcomeMsg.className = 'message success';
+            welcomeMsg.style.display = 'block';
+            
+            setTimeout(() => {
+                welcomeMsg.style.display = 'none';
+            }, 2000);
+        }
+
+        function agregarAlCarritoDesdeModal() {
+            if (libroSeleccionado) {
+                agregarAlCarrito(libroSeleccionado.id);
+                cerrarModalLibro();
+            }
+        }
+
+        function actualizarContadorCarrito() {
+            const carrito = obtenerCarrito();
+            const totalItems = carrito.reduce((total, item) => total + item.cantidad, 0);
+            document.getElementById('cartCount').textContent = totalItems;
+        }
+
+        function actualizarCarrito() {
+            const carrito = obtenerCarrito();
+            const container = document.getElementById('carritoContainer');
+            
+            if (carrito.length === 0) {
+                container.innerHTML = `
+                    <div id="carritoVacio" style="text-align: center; padding: 60px; color: #666;">
+                        <i class="fas fa-shopping-cart" style="font-size: 60px; margin-bottom: 20px; opacity: 0.3;"></i>
+                        <h3>Tu carrito está vacío</h3>
+                        <p>Agrega libros desde el catálogo para comenzar</p>
+                        <button class="btn-edit-profile" onclick="mostrarSeccion('catalogo')">
+                            <i class="fas fa-book"></i> Ver Catálogo
+                        </button>
+                    </div>
+                `;
+                return;
+            }
+            
+            let html = `
+                <div class="carrito-items">
+                    <h3>Libros en tu carrito (${carrito.reduce((total, item) => total + item.cantidad, 0)})</h3>
+            `;
+            
+            let subtotal = 0;
+            
+            carrito.forEach((item, index) => {
+                const itemTotal = item.precio * item.cantidad;
+                subtotal += itemTotal;
+                
+                html += `
+                    <div class="carrito-item">
+                        <div class="carrito-imagen">
+                            <i class="fas fa-book"></i>
+                        </div>
+                        <div class="carrito-info">
+                            <div class="carrito-titulo">${item.titulo}</div>
+                            <div class="carrito-autor">${item.autor}</div>
+                            <div class="carrito-cantidad">
+                                <button class="btn-cantidad" onclick="actualizarCantidad(${index}, -1)">
+                                    <i class="fas fa-minus"></i>
+                                </button>
+                                <span>${item.cantidad}</span>
+                                <button class="btn-cantidad" onclick="actualizarCantidad(${index}, 1)">
+                                    <i class="fas fa-plus"></i>
+                                </button>
+                                <button class="btn-remove" onclick="eliminarDelCarrito(${index})">
+                                    <i class="fas fa-trash"></i> Eliminar
+                                </button>
+                            </div>
+                        </div>
+                        <div class="carrito-subtotal">$${itemTotal.toFixed(2)}</div>
+                    </div>
+                `;
+            });
+            
+            const iva = subtotal * 0.21;
+            const total = subtotal + iva;
+            
+            html += `
+                </div>
+                <div class="carrito-total">
+                    <div class="total-line">
+                        <span>Subtotal:</span>
+                        <span>$${subtotal.toFixed(2)}</span>
+                    </div>
+                    <div class="total-line">
+                        <span>IVA (21%):</span>
+                        <span>$${iva.toFixed(2)}</span>
+                    </div>
+                    <div class="total-line">
+                        <span class="total-final">Total:</span>
+                        <span class="total-final">$${total.toFixed(2)}</span>
+                    </div>
+                    <button class="checkout-btn" onclick="realizarPago()">
+                        <i class="fas fa-credit-card"></i> Proceder al Pago
+                    </button>
+                </div>
+            `;
+            
+            container.innerHTML = html;
+        }
+
+        function actualizarCantidad(index, cambio) {
+            let carrito = obtenerCarrito();
+            const item = carrito[index];
+            
+            if (cambio > 0) {
+                // Verificar stock
+                const libros = JSON.parse(localStorage.getItem('misalquil_libros') || '[]');
+                const libro = libros.find(l => l.id === item.libroId);
+                
+                if (libro && item.cantidad >= libro.stock) {
+                    alert('No hay más unidades disponibles de este libro');
+                    return;
+                }
+            }
+            
+            item.cantidad += cambio;
+            
+            if (item.cantidad <= 0) {
+                carrito.splice(index, 1);
+            }
+            
+            guardarCarrito(carrito);
+            actualizarCarrito();
+            actualizarContadorCarrito();
+        }
+
+        function eliminarDelCarrito(index) {
+            if (!confirm('¿Eliminar este libro del carrito?')) return;
+            
+            let carrito = obtenerCarrito();
+            carrito.splice(index, 1);
+            guardarCarrito(carrito);
+            
+            actualizarCarrito();
+            actualizarContadorCarrito();
+        }
+
+        function realizarPago() {
+            const carrito = obtenerCarrito();
+            
+            if (carrito.length === 0) {
+                alert('Tu carrito está vacío');
+                return;
+            }
+            
+            // Verificar stock antes de proceder
+            const libros = JSON.parse(localStorage.getItem('misalquil_libros') || '[]');
+            let stockInsuficiente = false;
+            let libroSinStock = '';
+            
+            carrito.forEach(item => {
+                const libro = libros.find(l => l.id === item.libroId);
+                if (libro && item.cantidad > libro.stock) {
+                    stockInsuficiente = true;
+                    libroSinStock = libro.titulo;
+                }
+            });
+            
+            if (stockInsuficiente) {
+                alert(`No hay suficiente stock para "${libroSinStock}". Por favor actualiza tu carrito.`);
+                return;
+            }
+            
+            // Simular proceso de pago
+            if (confirm(`¿Confirmar compra por $${calcularTotal().toFixed(2)}?`)) {
+                // Crear préstamos
+                const prestamos = JSON.parse(localStorage.getItem('misalquil_prestamos') || '[]');
+                const nuevoPrestamoId = prestamos.length > 0 ? Math.max(...prestamos.map(p => p.id)) + 1 : 1;
+                
+                carrito.forEach(item => {
+                    // Actualizar stock
+                    const libroIndex = libros.findIndex(l => l.id === item.libroId);
+                    if (libroIndex !== -1) {
+                        libros[libroIndex].stock -= item.cantidad;
+                    }
+                    
+                    // Crear préstamo
+                    const fechaInicio = new Date();
+                    const fechaFin = new Date();
+                    fechaFin.setDate(fechaFin.getDate() + 15); // 15 días de préstamo
+                    
+                    prestamos.push({
+                        id: nuevoPrestamoId,
+                        usuarioId: usuarioActual.id,
+                        libroId: item.libroId,
+                        cantidad: item.cantidad,
+                        precio: item.precio * item.cantidad,
+                        fechaInicio: fechaInicio.toISOString(),
+                        fechaFin: fechaFin.toISOString(),
+                        estado: 'activo',
+                        pagado: true
+                    });
+                });
+                
+                // Guardar cambios
+                localStorage.setItem('misalquil_libros', JSON.stringify(libros));
+                localStorage.setItem('misalquil_prestamos', JSON.stringify(prestamos));
+                
+                // Vaciar carrito
+                guardarCarrito([]);
+                
+                // Actualizar interfaz
+                actualizarCarrito();
+                actualizarContadorCarrito();
+                cargarCatalogo();
+                cargarPrestamosUsuario();
+                
+                // Mostrar confirmación
+                alert('¡Pago realizado exitosamente! Los libros han sido agregados a tus préstamos.');
+                mostrarSeccion('prestamos');
+            }
+        }
+
+        function calcularTotal() {
+            const carrito = obtenerCarrito();
+            const subtotal = carrito.reduce((total, item) => total + (item.precio * item.cantidad), 0);
+            return subtotal * 1.21; // IVA incluido
+        }
+
+        // ============================
+        // FUNCIONES DE PRÉSTAMOS
+        // ============================
+        function cargarPrestamosUsuario() {
+            const prestamos = JSON.parse(localStorage.getItem('misalquil_prestamos') || '[]');
+            const libros = JSON.parse(localStorage.getItem('misalquil_libros') || '[]');
+            
+            const prestamosUsuario = prestamos.filter(p => p.usuarioId === usuarioActual.id);
+            const container = document.getElementById('prestamosList');
+            
+            if (prestamosUsuario.length === 0) {
+                container.innerHTML = `
+                    <div style="text-align: center; padding: 60px; color: #666;">
+                        <i class="fas fa-exchange-alt" style="font-size: 60px; margin-bottom: 20px; opacity: 0.3;"></i>
+                        <h3>No tienes préstamos activos</h3>
+                        <p>Alquila libros desde el catálogo para comenzar</p>
+                    </div>
+                `;
+                
+                // Actualizar estadísticas en perfil
+                document.getElementById('profilePrestamos').textContent = '0 préstamos';
+                return;
+            }
+            
+            let html = '';
+            let totalPrestamos = 0;
+            
+            prestamosUsuario.forEach(prestamo => {
+                totalPrestamos++;
+                const libro = libros.find(l => l.id === prestamo.libroId);
+                if (!libro) return;
+                
+                const fechaInicio = new Date(prestamo.fechaInicio).toLocaleDateString();
+                const fechaFin = new Date(prestamo.fechaFin).toLocaleDateString();
+                const hoy = new Date();
+                const fechaFinDate = new Date(prestamo.fechaFin);
+                
+                let estado = 'completado';
+                let estadoClass = 'estado-completado';
+                
+                if (prestamo.estado === 'activo') {
+                    if (hoy > fechaFinDate) {
+                        estado = 'vencido';
+                        estadoClass = 'estado-vencido';
+                    } else {
+                        estado = 'activo';
+                        estadoClass = 'estado-activo';
+                    }
+                }
+                
+                html += `
+                    <div class="prestamo-card">
+                        <div class="prestamo-header">
+                            <div class="prestamo-libro">${libro.titulo}</div>
+                            <div class="prestamo-estado ${estadoClass}">${estado}</div>
+                        </div>
+                        <div class="prestamo-detalles">
+                            <div class="detalle-item">
+                                <div class="detalle-label">Autor</div>
+                                <div class="detalle-valor">${libro.autor}</div>
+                            </div>
+                            <div class="detalle-item">
+                                <div class="detalle-label">Fecha Inicio</div>
+                                <div class="detalle-valor">${fechaInicio}</div>
+                            </div>
+                            <div class="detalle-item">
+                                <div class="detalle-label">Fecha Devolución</div>
+                                <div class="detalle-valor">${fechaFin}</div>
+                            </div>
+                            <div class="detalle-item">
+                                <div class="detalle-label">Cantidad</div>
+                                <div class="detalle-valor">${prestamo.cantidad}</div>
+                            </div>
+                            <div class="detalle-item">
+                                <div class="detalle-label">Precio Total</div>
+                                <div class="detalle-valor">$${prestamo.precio.toFixed(2)}</div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+            
+            container.innerHTML = html;
+            
+            // Actualizar estadísticas en perfil
+            document.getElementById('profilePrestamos').textContent = `${totalPrestamos} préstamos`;
+            
+            // Obtener fecha de primer préstamo para "miembro desde"
+            const primerPrestamo = prestamosUsuario.sort((a, b) => new Date(a.fechaInicio) - new Date(b.fechaInicio))[0];
+            if (primerPrestamo) {
+                const fechaMiembro = new Date(primerPrestamo.fechaInicio).toLocaleDateString();
+                document.getElementById('profileMiembro').textContent = `Miembro desde: ${fechaMiembro}`;
+            }
+        }
+
+        // ============================
+        // FUNCIONES DE PERFIL
+        // ============================
+        function editarPerfil() {
+            const nuevoTelefono = prompt('Nuevo teléfono:', usuarioActual.telefono || '');
+            if (nuevoTelefono === null) return;
+            
+            const nuevaDireccion = prompt('Nueva dirección:', usuarioActual.direccion || '');
+            if (nuevaDireccion === null) return;
+            
+            // Actualizar usuario
+            let usuarios = JSON.parse(localStorage.getItem('misalquil_usuarios') || '[]');
+            const usuarioIndex = usuarios.findIndex(u => u.id === usuarioActual.id);
+            
+            if (usuarioIndex !== -1) {
+                usuarios[usuarioIndex].telefono = nuevoTelefono;
+                usuarios[usuarioIndex].direccion = nuevaDireccion;
+                
+                localStorage.setItem('misalquil_usuarios', JSON.stringify(usuarios));
+                
+                // Actualizar sesión
+                usuarioActual.telefono = nuevoTelefono;
+                usuarioActual.direccion = nuevaDireccion;
+                sessionStorage.setItem('usuario_actual', JSON.stringify(usuarioActual));
+                
+                // Actualizar interfaz
+                document.getElementById('profilePhone').textContent = nuevoTelefono || 'N/A';
+                document.getElementById('profileAddress').textContent = nuevaDireccion || 'N/A';
+                
+                alert('Perfil actualizado exitosamente');
+            }
+        }
+
+        // ============================
+        // INICIALIZACIÓN
+        // ============================
+        window.addEventListener('DOMContentLoaded', verificarSesion);
+    </script>
+</body>
+</html>

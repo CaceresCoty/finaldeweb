@@ -1,0 +1,642 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bibliotecca - Login</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #1e3c72, #2a5298);
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .container {
+            display: flex;
+            width: 900px;
+            height: 550px;
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
+        }
+
+        .left-panel {
+            flex: 1;
+            background: linear-gradient(135deg, #4361ee, #3a0ca3);
+            color: white;
+            padding: 50px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .logo i {
+            font-size: 40px;
+            background: rgba(255, 255, 255, 0.2);
+            padding: 15px;
+            border-radius: 50%;
+        }
+
+        .logo h1 {
+            font-size: 32px;
+            font-weight: 700;
+        }
+
+        .welcome-text h2 {
+            font-size: 28px;
+            margin-bottom: 15px;
+        }
+
+        .welcome-text p {
+            opacity: 0.9;
+            line-height: 1.6;
+            margin-bottom: 30px;
+        }
+
+        .features {
+            margin-top: 30px;
+        }
+
+        .feature-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .feature-item i {
+            color: #4cc9f0;
+        }
+
+        .right-panel {
+            flex: 1;
+            padding: 50px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .login-form h3 {
+            color: #333;
+            font-size: 24px;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #555;
+            font-weight: 500;
+        }
+
+        .input-with-icon {
+            position: relative;
+        }
+
+        .input-with-icon i {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #777;
+        }
+
+        .input-with-icon input {
+            width: 100%;
+            padding: 14px 14px 14px 45px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 16px;
+            transition: all 0.3s;
+        }
+
+        .input-with-icon input:focus {
+            border-color: #4361ee;
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.1);
+        }
+
+        .btn-login {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(to right, #4361ee, #3a0ca3);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-top: 10px;
+        }
+
+        .btn-login:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(67, 97, 238, 0.4);
+        }
+
+        .quick-login {
+            margin-top: 30px;
+            text-align: center;
+        }
+
+        .quick-login p {
+            color: #777;
+            margin-bottom: 15px;
+            font-size: 14px;
+        }
+
+        .quick-buttons {
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn-quick {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            transition: all 0.3s;
+        }
+
+        .btn-admin {
+            background: #ff7b00;
+            color: white;
+        }
+
+        .btn-user {
+            background: #00b894;
+            color: white;
+        }
+
+        .btn-quick:hover {
+            opacity: 0.9;
+            transform: translateY(-2px);
+        }
+
+        .alert {
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            display: none;
+            text-align: center;
+        }
+
+        .alert-error {
+            background: #ffe6e6;
+            color: #d32f2f;
+            border: 1px solid #ffcdd2;
+        }
+
+        .alert-success {
+            background: #e6ffe6;
+            color: #388e3c;
+            border: 1px solid #c8e6c9;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Panel izquierdo -->
+        <div class="left-panel">
+            <div class="logo">
+                <i class="fas fa-book-reader"></i>
+                <h1>MIS ALQUIL</h1>
+            </div>
+            
+            <div class="welcome-text">
+                <h2>Biblioteca Digital</h2>
+                <p>Sistema integral de gestión de préstamos de libros. Accede a nuestro catálogo de más de 500 títulos.</p>
+            </div>
+
+            <div class="features">
+                <div class="feature-item">
+                    <i class="fas fa-check-circle"></i>
+                    <span>Préstamos por 15 días</span>
+                </div>
+                <div class="feature-item">
+                    <i class="fas fa-check-circle"></i>
+                    <span>Sistema de reservas online</span>
+                </div>
+                <div class="feature-item">
+                    <i class="fas fa-check-circle"></i>
+                    <span>Notificaciones automáticas</span>
+                </div>
+                <div class="feature-item">
+                    <i class="fas fa-check-circle"></i>
+                    <span>Panel administrativo</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Panel derecho - Login -->
+        <div class="right-panel">
+            <div class="login-form">
+                <h3>Iniciar Sesión</h3>
+                
+                <div id="alertMessage" class="alert"></div>
+
+                <form id="loginForm">
+                    <div class="form-group">
+                        <label for="email">Correo Electrónico</label>
+                        <div class="input-with-icon">
+                            <i class="fas fa-envelope"></i>
+                            <input type="email" id="email" placeholder="ejemplo@correo.com" required>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="password">Contraseña</label>
+                        <div class="input-with-icon">
+                            <i class="fas fa-lock"></i>
+                            <input type="password" id="password" placeholder="••••••••" required>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn-login">
+                        <i class="fas fa-sign-in-alt"></i> Ingresar al Sistema
+                    </button>
+                </form>
+
+                <div class="quick-login">
+                    <p>Acceso rápido para pruebas:</p>
+                    <div class="quick-buttons">
+                        <button type="button" class="btn-quick btn-admin" onclick="quickLogin('admin@misalquil.com', 'admin123')">
+                            <i class="fas fa-crown"></i> Admin
+                        </button>
+                        <button type="button" class="btn-quick btn-user" onclick="quickLogin('caceres@ejemplo.com', 'caceres123')">
+                            <i class="fas fa-user"></i> Cáceres José
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ============================================
+        // MEJORAS IMPLEMENTADAS EN LOGIN.HTML
+        // ============================================
+        
+        // 1. FUNCIÓN MEJORADA: Verificar si ya hay sesión activa
+        function verificarSesionActiva() {
+            const usuario = JSON.parse(sessionStorage.getItem('usuario_actual'));
+            if (usuario) {
+                // Si ya hay sesión, redirigir automáticamente
+                if (usuario.tipo === 'admin') {
+                    window.location.href = 'admin.html';
+                } else {
+                    window.location.href = 'usuario.html';
+                }
+            }
+        }
+
+        // 2. FUNCIÓN MEJORADA: Inicializar datos con validación
+        function inicializarDatos() {
+            console.log('🔧 Inicializando sistema Mis Alquil...');
+            
+            // Verificar si ya existen datos
+            if (!localStorage.getItem('misalquil_usuarios')) {
+                console.log('📝 Creando usuarios por defecto...');
+                
+                // Crear usuarios por defecto CON MEJORAS
+                const usuarios = [
+                    {
+                        id: 1,
+                        nombre: "Administrador Principal",
+                        email: "admin@misalquil.com",
+                        password: "admin123",
+                        tipo: "admin",
+                        telefono: "351-1234567",
+                        direccion: "Sistema Central",
+                        fechaRegistro: new Date().toISOString(),
+                        activo: true
+                    },
+                    {
+                        id: 2,
+                        nombre: "Cáceres José",
+                        email: "caceres@ejemplo.com",
+                        password: "caceres123",
+                        tipo: "usuario",
+                        telefono: "351-7654321",
+                        direccion: "Av. Siempre Viva 742",
+                        fechaRegistro: new Date().toISOString(),
+                        activo: true
+                    },
+                    {
+                        id: 3,
+                        nombre: "María González",
+                        email: "maria@ejemplo.com",
+                        password: "maria123",
+                        tipo: "usuario",
+                        telefono: "351-5551234",
+                        direccion: "Calle Falsa 123",
+                        fechaRegistro: new Date().toISOString(),
+                        activo: true
+                    }
+                ];
+                localStorage.setItem('misalquil_usuarios', JSON.stringify(usuarios));
+                console.log('✅ Usuarios creados exitosamente');
+            }
+
+            // Crear libros por defecto si no existen
+            if (!localStorage.getItem('misalquil_libros')) {
+                console.log('📚 Creando catálogo de libros...');
+                
+                const libros = [
+                    {
+                        id: 1,
+                        titulo: "Coraline",
+                        autor: "Neil Gaiman",
+                        genero: "Terror",
+                        precio: 15.99,
+                        stock: 5,
+                        descripcion: "Novela de terror infantil sobre una niña que descubre una puerta a un mundo alternativo.",
+                        fechaAgregado: new Date().toISOString(),
+                        disponible: true
+                    },
+                    {
+                        id: 2,
+                        titulo: "Cien Años de Soledad",
+                        autor: "Gabriel García Márquez",
+                        genero: "Realismo Mágico",
+                        precio: 22.50,
+                        stock: 3,
+                        descripcion: "Obra maestra que narra la historia de la familia Buendía en Macondo.",
+                        fechaAgregado: new Date().toISOString(),
+                        disponible: true
+                    },
+                    {
+                        id: 3,
+                        titulo: "1984",
+                        autor: "George Orwell",
+                        genero: "Distopía",
+                        precio: 18.75,
+                        stock: 7,
+                        descripcion: "Novela política de ficción distópica sobre la vigilancia masiva y la manipulación.",
+                        fechaAgregado: new Date().toISOString(),
+                        disponible: true
+                    },
+                    {
+                        id: 4,
+                        titulo: "El Principito",
+                        autor: "Antoine de Saint-Exupéry",
+                        genero: "Fábula",
+                        precio: 12.25,
+                        stock: 10,
+                        descripcion: "Fábula sobre un pequeño príncipe que viaja por diversos planetas.",
+                        fechaAgregado: new Date().toISOString(),
+                        disponible: true
+                    },
+                    {
+                        id: 5,
+                        titulo: "Harry Potter y la Piedra Filosofal",
+                        autor: "J.K. Rowling",
+                        genero: "Fantasía",
+                        precio: 20.00,
+                        stock: 4,
+                        descripcion: "Primer libro de la serie sobre el joven mago Harry Potter.",
+                        fechaAgregado: new Date().toISOString(),
+                        disponible: true
+                    },
+                    {
+                        id: 6,
+                        titulo: "El Señor de los Anillos",
+                        autor: "J.R.R. Tolkien",
+                        genero: "Fantasía Épica",
+                        precio: 28.99,
+                        stock: 2,
+                        descripcion: "Trilogía épica sobre la lucha por destruir el Anillo Único.",
+                        fechaAgregado: new Date().toISOString(),
+                        disponible: true
+                    }
+                ];
+                localStorage.setItem('misalquil_libros', JSON.stringify(libros));
+                console.log('✅ Catálogo de libros creado');
+            }
+
+            // Crear préstamos vacíos si no existen
+            if (!localStorage.getItem('misalquil_prestamos')) {
+                localStorage.setItem('misalquil_prestamos', JSON.stringify([]));
+                console.log('📄 Estructura de préstamos creada');
+            }
+
+            // Crear carritos vacíos si no existen
+            if (!localStorage.getItem('misalquil_carritos')) {
+                localStorage.setItem('misalquil_carritos', JSON.stringify({}));
+                console.log('🛒 Estructura de carritos creada');
+            }
+            
+            console.log('🚀 Sistema inicializado correctamente');
+        }
+
+        // 3. FUNCIÓN MEJORADA: Mostrar mensaje de alerta
+        function mostrarAlerta(mensaje, tipo = 'error', duracion = 3000) {
+            const alertDiv = document.getElementById('alertMessage');
+            alertDiv.textContent = mensaje;
+            alertDiv.className = `alert alert-${tipo}`;
+            alertDiv.style.display = 'block';
+            
+            // Auto-ocultar mensajes de éxito
+            if (tipo === 'success') {
+                setTimeout(() => {
+                    alertDiv.style.display = 'none';
+                }, duracion);
+            }
+        }
+
+        // 4. FUNCIÓN MEJORADA: Login rápido con validación
+        function quickLogin(email, password) {
+            if (!email || !password) {
+                mostrarAlerta('Credenciales incompletas');
+                return;
+            }
+            
+            document.getElementById('email').value = email;
+            document.getElementById('password').value = password;
+            
+            // Simular clic en botón de login
+            setTimeout(() => {
+                document.querySelector('.btn-login').click();
+            }, 100);
+        }
+
+        // 5. FUNCIÓN MEJORADA: Validar credenciales
+        function validarCredenciales(email, password) {
+            if (!email || !password) {
+                return { valido: false, mensaje: 'Por favor completa todos los campos' };
+            }
+            
+            // Validar formato de email
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(email)) {
+                return { valido: false, mensaje: 'Por favor ingresa un email válido' };
+            }
+            
+            // Validar longitud de contraseña
+            if (password.length < 4) {
+                return { valido: false, mensaje: 'La contraseña debe tener al menos 4 caracteres' };
+            }
+            
+            return { valido: true, mensaje: '' };
+        }
+
+        // 6. FUNCIÓN MEJORADA: Manejar login (CON SEGURIDAD)
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const email = document.getElementById('email').value.trim();
+            const password = document.getElementById('password').value;
+            
+            // Validar credenciales
+            const validacion = validarCredenciales(email, password);
+            if (!validacion.valido) {
+                mostrarAlerta(validacion.mensaje);
+                return;
+            }
+            
+            // Obtener usuarios
+            const usuarios = JSON.parse(localStorage.getItem('misalquil_usuarios') || '[]');
+            
+            // Buscar usuario (MEJORADA - case insensitive y verifica estado)
+            const usuario = usuarios.find(u => 
+                u.email.toLowerCase() === email.toLowerCase() && 
+                u.password === password &&
+                (u.activo !== false) // Verificar que el usuario esté activo
+            );
+            
+            if (usuario) {
+                // MEJORA: Mostrar mensaje de éxito
+                mostrarAlerta(`¡Bienvenido ${usuario.nombre}!`, 'success', 1500);
+                
+                // MEJORA: Limpiar campos
+                document.getElementById('email').value = '';
+                document.getElementById('password').value = '';
+                
+                // Guardar usuario en sesión (CON DATOS COMPLETOS)
+                sessionStorage.setItem('usuario_actual', JSON.stringify({
+                    ...usuario,
+                    ultimoAcceso: new Date().toISOString(),
+                    sesionId: Date.now() // ID único de sesión
+                }));
+                
+                // MEJORA: Pequeño delay para mostrar mensaje
+                setTimeout(() => {
+                    // Redirigir según tipo (ESTA PARTE YA ESTABA BIEN)
+                    if (usuario.tipo === 'admin') {
+                        window.location.href = 'admin.html';
+                    } else {
+                        window.location.href = 'usuario.html';
+                    }
+                }, 1500);
+                
+            } else {
+                // MEJORA: Mensaje más específico
+                mostrarAlerta('Credenciales incorrectas o usuario inactivo');
+                
+                // MEJORA: Enfocar campo de contraseña
+                document.getElementById('password').focus();
+                document.getElementById('password').select();
+            }
+        });
+
+        // 7. MEJORA: Teclas rápidas para desarrollo
+        document.addEventListener('keydown', function(e) {
+            // Ctrl+Alt+A = Login como admin
+            if (e.ctrlKey && e.altKey && e.key === 'a') {
+                e.preventDefault();
+                quickLogin('admin@misalquil.com', 'admin123');
+            }
+            
+            // Ctrl+Alt+U = Login como usuario
+            if (e.ctrlKey && e.altKey && e.key === 'u') {
+                e.preventDefault();
+                quickLogin('caceres@ejemplo.com', 'caceres123');
+            }
+            
+            // Ctrl+Alt+L = Limpiar campos
+            if (e.ctrlKey && e.altKey && e.key === 'l') {
+                e.preventDefault();
+                document.getElementById('email').value = '';
+                document.getElementById('password').value = '';
+                document.getElementById('email').focus();
+            }
+        });
+
+        // 8. MEJORA: Auto-focus en email al cargar
+        window.addEventListener('DOMContentLoaded', function() {
+            console.log('🎯 Sistema Mis Alquil - Login cargado');
+            
+            // Verificar si hay sesión activa
+            verificarSesionActiva();
+            
+            // Inicializar datos
+            inicializarDatos();
+            
+            // Auto-focus en campo email
+            document.getElementById('email').focus();
+            
+            // MEJORA: Mostrar estado del sistema
+            const usuarios = JSON.parse(localStorage.getItem('misalquil_usuarios') || '[]');
+            const libros = JSON.parse(localStorage.getItem('misalquil_libros') || '[]');
+            
+            console.log(`👥 Usuarios registrados: ${usuarios.length}`);
+            console.log(`📚 Libros en catálogo: ${libros.length}`);
+            console.log(`🔑 Admin: admin@misalquil.com / admin123`);
+            console.log(`👤 Usuario: caceres@ejemplo.com / caceres123`);
+        });
+
+        // 9. MEJORA: Función para restablecer sistema (solo desarrollo)
+        function resetearSistema() {
+            if (confirm('⚠️ ¿Restablecer todo el sistema? Esto borrará todos los datos.')) {
+                localStorage.clear();
+                sessionStorage.clear();
+                mostrarAlerta('✅ Sistema restablecido. Recarga la página.', 'success');
+                setTimeout(() => {
+                    location.reload();
+                }, 2000);
+            }
+        }
+        
+        // 10. MEJORA: Debug helper
+        function mostrarEstadoSistema() {
+            console.log('=== ESTADO DEL SISTEMA ===');
+            console.log('Usuarios:', JSON.parse(localStorage.getItem('misalquil_usuarios') || '[]'));
+            console.log('Libros:', JSON.parse(localStorage.getItem('misalquil_libros') || '[]'));
+            console.log('Préstamos:', JSON.parse(localStorage.getItem('misalquil_prestamos') || '[]'));
+            console.log('Carritos:', JSON.parse(localStorage.getItem('misalquil_carritos') || '{}'));
+            console.log('Sesión actual:', JSON.parse(sessionStorage.getItem('usuario_actual') || 'null'));
+            console.log('=========================');
+        }
+    </script>
+</body>
+</html>
